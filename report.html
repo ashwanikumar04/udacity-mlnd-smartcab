@@ -31946,7 +31946,43 @@ WGZmZmZmZg3yf2cFAQH1Uf+eAAAAAElFTkSuQmCC
 <p><strong>Answer:</strong> 
 I used following state marker</p>
 <p><code>waypoint + ":" + inputs['left'] + ":" + inputs['oncoming']+":" + inputs['light']</code></p>
-<p>An example optimal policy will be to wait on the red signal when the intent of the smartcab is to go forward with oncoming traffic.</p>
+<p>An example optimal policy will be to wait on the red signal when the intent of the smartcab is to go forward with oncoming traffic.
+The state-action will look like</p>
+<table>
+<thead><tr>
+<th>#</th>
+<th style="text-align:center">State</th>
+<th style="text-align:right">Action</th>
+<th style="text-align:right">Policy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:center">forward:None:forward:red</td>
+<td style="text-align:right">None</td>
+<td style="text-align:right">optimal</td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:center">forward:None:forward:red</td>
+<td style="text-align:right">left</td>
+<td style="text-align:right">incorrect</td>
+</tr>
+<tr>
+<td>3</td>
+<td style="text-align:center">forward:None:forward:red</td>
+<td style="text-align:right">right</td>
+<td style="text-align:right">suboptimal</td>
+</tr>
+<tr>
+<td>4</td>
+<td style="text-align:center">forward:None:forward:red</td>
+<td style="text-align:right">forward</td>
+<td style="text-align:right">incorrect</td>
+</tr>
+</tbody>
+</table>
 <p>An example for the same from the <code>sim_improved-learning.txt</code> at line#47.</p>
 
 <pre><code>forward:None:forward:red
@@ -31954,7 +31990,7 @@ I used following state marker</p>
  -- forward : -11.49
  -- right : 0.80
  -- left : -9.37</code></pre>
-<p>As can be seen from the above policy, that the agent did choose not to do anything as <code>None</code> has the heighest value. Also, <code>right</code> has positive value as it is allowed to take right when the signal is red.</p>
+<p>This result is because of reinforcement learning. The heighest value is for <strong>None</strong> which is correct in the optimal policy. The agent also learned a suboptimal policy <strong>right</strong> which is also correct it is allowed to take <strong>right</strong> when the signal is red.</p>
 <p>One example of the sub-optimal policy can be as below (line#89)</p>
 
 <pre><code>right:right:forward:green

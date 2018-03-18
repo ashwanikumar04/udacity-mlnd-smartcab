@@ -518,6 +518,14 @@ I used following state marker
 ```waypoint + ":" + inputs['left'] + ":" + inputs['oncoming']+":" + inputs['light']```
 
 An example optimal policy will be to wait on the red signal when the intent of the smartcab is to go forward with oncoming traffic.
+The state-action will look like
+
+| #  | State                   |Action |Policy    |
+| -- |:-----------------------:|------:|------:   |
+| 1  |forward:None:forward:red |None   |optimal   |
+| 2  |forward:None:forward:red |left   |incorrect |
+| 3  |forward:None:forward:red |right  |suboptimal|
+| 4  |forward:None:forward:red |forward|incorrect |
 
 An example for the same from the ```sim_improved-learning.txt``` at line#47.
 
@@ -529,7 +537,8 @@ forward:None:forward:red
  -- left : -9.37
 
 ```
-As can be seen from the above policy, that the agent did choose not to do anything as ```None``` has the heighest value. Also, ```right``` has positive value as it is allowed to take right when the signal is red.
+
+This result is because of reinforcement learning. The heighest value is for **None** which is correct in the optimal policy. The agent also learned a suboptimal policy **right** which is also correct it is allowed to take **right** when the signal is red.
 
 One example of the sub-optimal policy can be as below (line#89)
 ```
