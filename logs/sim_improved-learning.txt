@@ -448,8 +448,8 @@ right:None:forward:red
 
 forward:right:right:red
  -- None : 0.00
- -- forward : 0.00
- -- right : 0.59
+ -- forward : -0.59
+ -- right : 0.00
  -- left : 0.00
 
 right:None:left:green

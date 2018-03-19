@@ -513,34 +513,54 @@ Sometimes, the answer to the important question *"what am I trying to get my age
 Be sure to document your `state` dictionary below, it should be easy for the reader to understand what each state represents.
 
 **Answer:** 
+
 I used following state marker
 
-```waypoint + ":" + inputs['left'] + ":" + inputs['oncoming']+":" + inputs['light']```
 
-An example optimal policy will be to wait on the red signal when the intent of the smartcab is to go forward with oncoming traffic.
+```
+waypoint + ":" + inputs['left'] + ":" + inputs['oncoming']+":" + inputs['light']
+
+```
+
+My example optimal policy will be to wait on the red light when the intent of the smartcab is to go forward with no  oncoming traffic with the possible action of None, forward, left and right:
 The state-action will look like
 
 | #  | State                   |Action |Policy    |
 | -- |:-----------------------:|------:|------:   |
-| 1  |forward:None:forward:red |None   |optimal   |
-| 2  |forward:None:forward:red |left   |incorrect |
-| 3  |forward:None:forward:red |right  |suboptimal|
-| 4  |forward:None:forward:red |forward|incorrect |
+| 1  |forward:None:None:red    |None   |optimal   |
+| 2  |forward:None:None:red    |left   |incorrect |
+| 3  |forward:None:None:red    |right  |suboptimal|
+| 4  |forward:None:None:red    |forward|incorrect |
 
-An example for the same from the ```sim_improved-learning.txt``` at line#47.
-
-```
-forward:None:forward:red
- -- None : 2.11
- -- forward : -11.49
- -- right : 0.80
- -- left : -9.37
+An example for the same from the ```sim_improved-learning.txt```.
 
 ```
+forward:None:None:red
+ -- None : 1.86
+ -- forward : -24.58
+ -- right : 0.68
+ -- left : -15.26
 
-This result is because of reinforcement learning. The heighest value is for **None** which is correct in the optimal policy. The agent also learned a suboptimal policy **right** which is also correct it is allowed to take **right** when the signal is red.
+```
 
-One example of the sub-optimal policy can be as below (line#89)
+that is the result of the reinforcement training. The action with the highest value of 1.86 for this policy None, matches that of the correct action in the optimal policy. It has also learned a suboptimal policy right which has a lesser value of 0.68 than the optimal one which also matches that of the correct action for the suboptimal policy. This makes sense, since in the US, you are allowed to take right turns on red if there is no traffic.
+
+
+After searching, the sim_improved-learning.txt text file to find any suboptimal policies that the final Q-Learning agent may have learned for a state and following policy was found: 
+
+```
+forward:right:right:red
+ -- None : 0.00
+ -- forward : -0.59
+ -- right : 0.00
+ -- left : 0.00
+ ```
+
+In this state, the final optimized Q-Learning agent would not go forward on a red light which is the correct policy setting, but can choose to take left, which has the same Q-value as right or None. Taking a left on red traffic light is in violation to the US traffic rules. This can be because of the final optimized Q-Learning agent never reached this state in training and chose to make a left turn that would cause it to learn that left turn on red would result in a bad action with negative rewards. This will result in the final agent not searching the full feature space and learning the negative results from the environemnt, thus making the agent less optimized than what is expected and fails some of the tests out of the 100.
+
+
+One more example of the sub-optimal policy can be as below (line#89)
+
 ```
 right:right:forward:green
  -- None : -1.31
@@ -549,12 +569,7 @@ right:right:forward:green
  -- left : 0.00
 ```
 
-As, can be seen here that even though ```waypoint``` is right, the agent will decide to go forward as it has the heighest value. This kind of sub-optimal policies one of the reasons for the reliability rating to be ```A``` instead of ```A+```.
-
-
-
-
-
+In this state, the final optimized Q-Learning agent would go forward instead of turn right since that action has the highest Q-value, even though ```waypoint``` is right to the destination in the environment. Instead right turn only has 0.25 Q-value much lower than 0.62 Q-value for forward. This means the final Q-Learning agent is not as efficient as it could be. This maybe one of the reason why the final Q-Learning agent only has an **A** instead of **A+** rating for reliability.
 
 -----
 ### Optional: Future Rewards - Discount Factor, `'gamma'`
